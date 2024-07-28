@@ -1,83 +1,98 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ApiNetCoreJwt6._0.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace ApiNetCoreJwt6._0.Controllers
 {
-    public class ClienteController : Controller
+    [ApiController]
+    [Route("cliente")]
+    public class ClienteController : ControllerBase
     {
-        // GET: ClienteController
-        public ActionResult Index()
+        [HttpGet]
+        [Route("listar")]
+        public dynamic listarCliente()
         {
-            return View();
+            //Todo el codigo
+
+            List<Cliente> clientes = new List<Cliente>
+            {
+                new Cliente
+                {
+                    id = "1",
+                    correo = "google@gmail.com",
+                    edad = "19",
+                    nombre = "Bernardo Peña"
+                },
+                new Cliente
+                {
+                    id = "2",
+                    correo = "miguelgoogle@gmail.com",
+                    edad = "23",
+                    nombre = "Miguel Mantilla"
+                }
+            };
+
+            return clientes;
         }
 
-        // GET: ClienteController/Details/5
-        public ActionResult Details(int id)
+        [HttpGet]
+        [Route("listarxid")]
+        public dynamic listarClientexid(int codigo)
         {
-            return View();
+            //obtienes el cliente de la db
+
+            return new Cliente
+            {
+                id = codigo.ToString(),
+                correo = "google@gmail.com",
+                edad = "19",
+                nombre = "Bernardo Peña"
+            };
         }
 
-        // GET: ClienteController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: ClienteController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        [Route("guardar")]
+        public dynamic guardarCliente(Cliente cliente)
         {
-            try
+            //Guardar en la db y le asignas un id
+            cliente.id = "3";
+
+            return new
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+                success = true,
+                message = "cliente registrado",
+                result = cliente
+            };
         }
 
-        // GET: ClienteController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: ClienteController/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        [Route("eliminar")]
+        public dynamic eliminarCliente(Cliente cliente)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
 
-        // GET: ClienteController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+            var respToken = Jwt.validatoken(identity);
 
-        // POST: ClienteController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
+            if (!respToken.succes) return respToken;
+
+            Usuario usuario = respToken.result;
+
+            if (usuario.rol != "administrador")
             {
-                return RedirectToAction(nameof(Index));
+                return new
+                {
+                    succes = false,  
+                    message = "No tienes permiso para eliminar clientes !",
+                    result = ""    
+                };
             }
-            catch
+            return new
             {
-                return View();
-            }
+                success = true,
+                message = "cliente eliminado",
+                result = cliente
+            };
         }
     }
 }

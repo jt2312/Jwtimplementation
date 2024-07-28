@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ApiNetCoreJwt6.0")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c91019776849fb6f25ce3f38329b758ba3ce90f4")]
 [assembly: System.Reflection.AssemblyProductAttribute("ApiNetCoreJwt6.0")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ApiNetCoreJwt6.0")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

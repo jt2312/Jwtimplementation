@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\ApiNetCoreJwt6.0.props" />
+</Project>
